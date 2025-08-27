@@ -12,6 +12,9 @@ jobs:
       - name: checkout code
         uses: actions/checkout@v4
 
+      - name: set up environment
+        run: cp .env.example .env
+
       - name: build Docker image
         run: docker build --target testing -t alpesone-app .
 
