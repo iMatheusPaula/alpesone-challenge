@@ -1,0 +1,23 @@
+name: Main Branch CI
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  laravel-tests:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v4
+
+      - name: build Docker image
+        run: docker build --target testing -t alpesone-app .
+
+      - name: execute tests
+        run: docker run --rm alpesone-app composer test
+
+      - name: notify if failed
+        if: ${{ failure() }}
+        run: echo "Tests failed"
