@@ -8,6 +8,10 @@ services:
     container_name: alpesone-app
     restart: unless-stopped
     working_dir: /var/www/
+    volumes:
+      - ./.env:/var/www/.env
+      - storage:/var/www/storage
+
     networks:
       - alpesone-network
 
@@ -25,7 +29,7 @@ services:
     networks:
       - alpesone-network
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-p${DB_PASSWORD:-root}"]
+      test: [ "CMD", "mysqladmin", "ping", "-p${DB_PASSWORD:-root}" ]
       retries: 3
       timeout: 5s
 
