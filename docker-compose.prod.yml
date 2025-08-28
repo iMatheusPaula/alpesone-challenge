@@ -9,9 +9,8 @@ services:
     restart: unless-stopped
     working_dir: /var/www/
     volumes:
-      - ./.env:/var/www/.env
+      - .env:/var/www/.env
       - storage:/var/www/storage
-
     networks:
       - alpesone-network
 
