@@ -29,3 +29,29 @@ jobs:
       - name: notify if failed
         if: ${{ failure() }}
         run: echo "Tests failed"
+
+  deploy:
+    needs: laravel-tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Production
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd /home/ubuntu/alpesone-challenge
+            
+            git pull origin main
+            
+            docker-compose up -d --build
+            docker compose exec app php artisan migrate --force
+            docker compose exec app php artisan config:cache
+            docker compose exec app php artisan route:cache
+            
+            docker image prune -f
