@@ -1,0 +1,52 @@
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      target: production
+    image: alpesone-app
+    container_name: alpesone-app
+    restart: unless-stopped
+    working_dir: /var/www/
+    networks:
+      - alpesone-network
+
+  db:
+    image: mysql:9
+    container_name: alpesone-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE:-alpesone_test}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root}
+    volumes:
+      - alpesone-mysql:/var/lib/mysql
+    ports:
+      - "${DB_PORT:-3306}:3306"
+    networks:
+      - alpesone-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-p${DB_PASSWORD:-root}"]
+      retries: 3
+      timeout: 5s
+
+  nginx:
+    image: nginx:alpine
+    container_name: alpesone-nginx
+    restart: unless-stopped
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx:/etc/nginx/conf.d
+    ports:
+      - "80:80"
+    networks:
+      - alpesone-network
+    depends_on:
+      - app
+
+networks:
+  alpesone-network:
+    driver: bridge
+
+volumes:
+  alpesone-mysql:
+    driver: local
