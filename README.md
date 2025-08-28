@@ -36,7 +36,7 @@ banco e qualquer coisa só reiniciar o container do laravel: `docker-compose res
 
 ### Como funciona o workflow
 
-Nosso arquivo `.github/workflows/main-ci.yml` faz o seguinte:
+O arquivo `.github/workflows/main-ci.yml` faz o seguinte:
 
 1. É ativado quando alguém faz push na branch main
 2. Roda em um ambiente Ubuntu mais recente
@@ -44,3 +44,8 @@ Nosso arquivo `.github/workflows/main-ci.yml` faz o seguinte:
 4. Constrói a imagem Docker usando o target "testing"
 5. Executa os testes usando o `composer test`
 6. Notifica se falhar
+
+### Como eu subi na AWS
+
+Pra criar a máquina na AWS eu documentei todo o processo em um script `create-ec2.sh`.
+Depois de criar a máquina, precisei configurar tudo nela. Que também está documentado no script `script-ec2.sh`
