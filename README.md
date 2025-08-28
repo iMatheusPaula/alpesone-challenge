@@ -1,104 +1,46 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# AlpesOne Challenge
 
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo">
 </p>
 
-## Docker Setup
+### Requisitos para rodar
 
-This project includes Docker configuration for easy development setup with PHP, MySQL, and Nginx.
+- Docker com o Docker Compose instalado
 
-### Requirements
+Temos três estágios no Dockerfile - que são definidos pelas targets no `docker-compose.yml`:
 
-- Docker
-- Docker Compose
+1. **Base**: É o começo de tudo. Tem o PHP 8.4 com as extensões essenciais.
+2. **Development**: Ambiente pra codar. Instala todas as dependências do composer.
+3. **Testing**: Pra rodar os testes. Não roda o entrypoint script - não queria que rodasse as migrations no ci.
+4. **Production**: Versão optimizada pra deploy. Não instala dependências de dev.
 
-### Getting Started
+O `docker-compose.yml` tem três serviços:
 
-1. Clone the repository
-2. Copy the environment file:
-   ```bash
-   cp .env.example .env
-   ```
-3. Start the Docker containers:
-   ```bash
-   docker-compose up -d
-   ```
-4. Install PHP dependencies:
-   ```bash
-   docker-compose exec app composer install
-   ```
-5. Generate application key:
-   ```bash
-   docker-compose exec app php artisan key:generate
-   ```
-6. Run database migrations:
-   ```bash
-   docker-compose exec app php artisan migrate
-   ```
+1. **app**: A aplicação Laravel em si com o php fpm
+2. **db**: Banco de dados MySQL 9
+3. **nginx**: Servidor web
 
-### Services
+### Como rodar tudo
 
-- **PHP App**: Laravel application running on PHP 8.2
-- **MySQL**: Database server running on port 3306
-- **Nginx**: Web server running on port 80
+Tô te mostrando o passo a passo, meu consagrado:
 
-### Accessing the Application
+1. Clone esse repositório: `git clone .... && cd alpesone-challenge`
 
-The application will be available at: http://localhost
+2. Suba os containers: `docker-compose up`
 
-## About Laravel
+3. Estará disponível em: `http://localhost`
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+O script `docker-entrypoint.sh` já vai fazer o .env e subir as migrations. Depois só configure o .env com os dados do
+banco e qualquer coisa só reiniciar o container do laravel: `docker-compose restart app`
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Como funciona o workflow
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Nosso arquivo `.github/workflows/main-ci.yml` faz o seguinte:
 
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+1. É ativado quando alguém faz push na branch main
+2. Roda em um ambiente Ubuntu mais recente
+3. Configura o ambiente copiando o .env.example
+4. Constrói a imagem Docker usando o target "testing"
+5. Executa os testes usando o `composer test`
+6. Notifica se falhar
