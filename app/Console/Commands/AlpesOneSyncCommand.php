@@ -117,7 +117,10 @@ class AlpesOneSyncCommand extends Command
                 || Carbon::parse($carData['created'] ?? null)->gt($lastSyncTime);
 
             if ($isNewerThanLastSync) {
-                Car::query()->updateOrCreate($mappedData);
+                Car::query()->updateOrCreate(
+                    ['external_id' => $carData['id']], 
+                    $mappedData
+                );
 
                 $this->info("Car data updated or created. ID: {$carData['id']}");
             }
