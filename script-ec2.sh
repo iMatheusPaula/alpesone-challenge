@@ -1,10 +1,6 @@
 sudo apt-get update -y
 sudo apt-get upgrade -y
 
-sudo apt-get install -y \
-    ca-certificates \
-    curl
-
 sudo apt install -y \
   apt-transport-https \
   ca-certificates \
@@ -18,7 +14,7 @@ sudo apt update -y
 apt-cache policy docker-ce
 sudo apt install -y docker-ce
 
-# Adicionar usuário ubuntu ao grupo docker (pra rodar sem sudo)
+# Adicionar usuário ubuntu ao grupo docker (pra rodar sem sudo) É BOM FAZER LOGOUT/LOGIN DEPOIS
 sudo usermod -aG docker ubuntu
 
 # Criando o projeto na ec2
@@ -39,13 +35,9 @@ vim .env
 # APP_URL=http://...
 # DB_PASSWORD=root
 
-# Rodar as migrations depois de configurar o .env
-docker compose -f docker-compose.prod.yml run --rm app php artisan migrate --no-interaction --force
-
 # Subir o projeto
 docker compose -f docker-compose.prod.yml up -d
 
 # Permissões de storage e cache
 sudo chown -R 33:33 storage bootstrap/cache
 sudo chmod -R ug+rw storage bootstrap/cache
-
