@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateCarRequest;
 use App\Models\Car;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\StoreCarRequest;
@@ -60,11 +61,11 @@ class CarController extends Controller
     /**
      * Update the specified car in storage.
      *
-     * @param StoreCarRequest $request
+     * @param UpdateCarRequest $request
      * @param Car $car
      * @return JsonResponse
      */
-    public function update(StoreCarRequest $request, Car $car): JsonResponse
+    public function update(UpdateCarRequest $request, Car $car): JsonResponse
     {
         $data = $request->validated();
 
