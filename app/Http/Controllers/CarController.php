@@ -17,11 +17,19 @@ class CarController extends Controller
      */
     public function index(): JsonResponse
     {
-        $car = Car::all();
+        $cars = Car::query()->paginate(15);
 
         return response()->json([
             'success' => true,
-            'data' => $car
+            'data' => $cars->items(),
+            'pagination' => [
+                'total' => $cars->total(),
+                'per_page' => $cars->perPage(),
+                'current_page' => $cars->currentPage(),
+                'last_page' => $cars->lastPage(),
+                'from' => $cars->firstItem(),
+                'to' => $cars->lastItem(),
+            ]
         ]);
     }
 
