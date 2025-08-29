@@ -39,19 +39,22 @@ Após a configuração, reinicie o container da aplicação: `docker-compose res
 A API possui os seguintes endpoints:
 
 ### Autenticação
+
 - **POST /api/register** - Registro de usuário
 - **POST /api/login** - Login de usuário
 - **GET /api/me** - Dados do usuário atual (requer autenticação)
 - **POST /api/logout** - Logout (requer autenticação)
 
 ### Gerenciamento de Carros
+
 - **GET /api/cars** - Listar todos os carros
 - **GET /api/cars/{id}** - Obter detalhes de um carro
 - **POST /api/cars** - Cadastrar novo carro (requer autenticação)
 - **PUT /api/cars/{id}** - Atualizar um carro (requer autenticação)
 - **DELETE /api/cars/{id}** - Excluir um carro (requer autenticação)
 
-Tem uma coleção do postman anexado a raiz do projeto para testar os endpoints: [Postman Collection](Cars.postman_collection.json)
+Tem uma coleção do postman anexado a raiz do projeto para testar os
+endpoints: [Postman Collection](cars.postman_collection.json)
 
 ## Integração com API AlpesOne
 
@@ -61,13 +64,16 @@ A aplicação inclui um comando Artisan para sincronização de dados da API Alp
 php artisan app:alpes-one-sync
 ```
 
-Este comando busca dados de carros da API externa e atualiza o banco de dados local. Pode ser executado manualmente ou via cron conforme configurado no ambiente de produção.
+Este comando busca dados de carros da API externa e atualiza o banco de dados local. Pode ser executado manualmente ou
+via cron conforme configurado no ambiente de produção.
 
 ## CI/CD Workflow
 
-O arquivo `.github/workflows/main-ci.yml` configura o workflow de CI/CD automatizado que é executado sempre que há alterações na branch principal:
+O arquivo `.github/workflows/main-ci.yml` configura o workflow de CI/CD automatizado que é executado sempre que há
+alterações na branch principal:
 
 ### Integração Contínua (CI)
+
 1. **Trigger**: Ativado automaticamente em cada push para a branch `main`
 2. **Ambiente**: Executado em uma máquina virtual Ubuntu mais recente no GitHub Actions
 3. **Preparação**: Configura o ambiente copiando o arquivo `.env.example` para `.env`
@@ -76,6 +82,7 @@ O arquivo `.github/workflows/main-ci.yml` configura o workflow de CI/CD automati
 6. **Notificação**: Gera alerta em caso de falha nos testes
 
 ### Entrega Contínua (CD)
+
 1. **Dependência**: Só é executado se a etapa de testes for bem-sucedida
 2. **Conexão**: Estabelece conexão SSH com a instância EC2 usando credenciais armazenadas como segredos
 3. **Atualização**: Faz pull da branch main no repositório no servidor
