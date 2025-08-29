@@ -12,11 +12,11 @@ php artisan config:cache
 php artisan route:cache
 
 # Configura o cron job para rodar o scheduler do Laravel a cada minuto
-echo '* * * * * cd /var/www && php artisan schedule:run >> /var/log/cron.log 2>&1' > /etc/cron.d/laravel-schedule
+echo '* * * * * cd /var/www && /usr/local/bin/php artisan schedule:run >> /var/log/cron.log 2>&1' > /etc/cron.d/laravel-schedule
 chmod 0644 /etc/cron.d/laravel-schedule
 crontab /etc/cron.d/laravel-schedule
 
 # Inicia o cron
-cron
+service cron start
 
 exec "$@"
