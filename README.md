@@ -49,3 +49,9 @@ O arquivo `.github/workflows/main-ci.yml` faz o seguinte:
 
 Pra criar a máquina na AWS eu documentei todo o processo em um script `create-ec2.sh`.
 Depois de criar a máquina, precisei configurar tudo nela. Que também está documentado no script `script-ec2.sh`
+
+### Sobre a integração
+
+Foi implementado um comando Artisan para sincronizar dados da API AlpesOne:
+
+`php artisan app:alpes-one-sync`
