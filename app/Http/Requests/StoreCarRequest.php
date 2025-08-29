@@ -18,11 +18,12 @@ class StoreCarRequest extends FormRequest
             'brand' => ['required', 'string', 'max:255'],
             'model' => ['required', 'string', 'max:255'],
             'version' => ['nullable', 'string', 'max:255'],
+            'model_year' => ['nullable', 'string', 'max:4'],
+            'build_year' => ['nullable', 'string', 'max:4'],
 
             // JSON/array fields
-            'year' => ['nullable', 'array'],
             'optionals' => ['nullable', 'array'],
-            'fotos' => ['nullable', 'array'],
+            'photos' => ['nullable', 'array'],
 
             'doors' => ['nullable', 'string', 'max:50'],
             'board' => ['nullable', 'string', 'max:100'],
@@ -30,9 +31,6 @@ class StoreCarRequest extends FormRequest
             'transmission' => ['nullable', 'string', 'max:100'],
             'km' => ['nullable', 'string', 'max:50'],
             'description' => ['nullable', 'string'],
-
-            'created_at_api' => ['nullable', 'date'],
-            'updated_at_api' => ['nullable', 'date'],
             'sold' => ['sometimes', 'boolean'],
             'category' => ['nullable', 'string', 'max:255'],
             'url_car' => ['nullable', 'url'],
@@ -43,30 +41,28 @@ class StoreCarRequest extends FormRequest
         ];
     }
 
-    /**
-     * Get custom messages for validator errors.
-     *
-     * @return array<string, string>
-     */
     public function messages(): array
     {
         return [
             'type.required' => 'O tipo do veículo é obrigatório',
             'type.string' => 'O tipo deve ser um texto',
             'type.max' => 'O tipo não pode ter mais que :max caracteres',
-            'brand.required' => 'A marca é obrigatória',
+            'brand.required' => 'A marca do veículo é obrigatória',
             'brand.string' => 'A marca deve ser um texto',
             'brand.max' => 'A marca não pode ter mais que :max caracteres',
-            'model.required' => 'O modelo é obrigatório',
+            'model.required' => 'O modelo do veículo é obrigatório',
             'model.string' => 'O modelo deve ser um texto',
             'model.max' => 'O modelo não pode ter mais que :max caracteres',
             'version.string' => 'A versão deve ser um texto',
             'version.max' => 'A versão não pode ter mais que :max caracteres',
-            'year.array' => 'O ano deve ser um array',
-            'optionals.array' => 'Os opcionais devem ser um array',
-            'fotos.array' => 'As fotos devem ser um array',
-            'doors.string' => 'As portas devem ser um texto',
-            'doors.max' => 'As portas não podem ter mais que :max caracteres',
+            'model_year.string' => 'O ano do modelo deve ser um texto',
+            'model_year.max' => 'O ano do modelo não pode ter mais que :max caracteres',
+            'build_year.string' => 'O ano de fabricação deve ser um texto',
+            'build_year.max' => 'O ano de fabricação não pode ter mais que :max caracteres',
+            'optionals.array' => 'Os opcionais devem ser uma lista',
+            'photos.array' => 'As fotos devem ser uma lista',
+            'doors.string' => 'O número de portas deve ser um texto',
+            'doors.max' => 'O número de portas não pode ter mais que :max caracteres',
             'board.string' => 'A placa deve ser um texto',
             'board.max' => 'A placa não pode ter mais que :max caracteres',
             'chassi.string' => 'O chassi deve ser um texto',
@@ -76,14 +72,12 @@ class StoreCarRequest extends FormRequest
             'km.string' => 'A quilometragem deve ser um texto',
             'km.max' => 'A quilometragem não pode ter mais que :max caracteres',
             'description.string' => 'A descrição deve ser um texto',
-            'created_at_api.date' => 'A data de criação deve ser uma data válida',
-            'updated_at_api.date' => 'A data de atualização deve ser uma data válida',
             'sold.boolean' => 'O campo vendido deve ser verdadeiro ou falso',
             'category.string' => 'A categoria deve ser um texto',
             'category.max' => 'A categoria não pode ter mais que :max caracteres',
             'url_car.url' => 'A URL do carro deve ser uma URL válida',
-            'price.numeric' => 'O preço deve ser um valor numérico',
-            'old_price.numeric' => 'O preço antigo deve ser um valor numérico',
+            'price.numeric' => 'O preço deve ser um número',
+            'old_price.numeric' => 'O preço antigo deve ser um número',
             'color.string' => 'A cor deve ser um texto',
             'color.max' => 'A cor não pode ter mais que :max caracteres',
             'fuel.string' => 'O combustível deve ser um texto',

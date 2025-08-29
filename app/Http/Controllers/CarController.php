@@ -34,7 +34,7 @@ class CarController extends Controller
     {
         $data = $request->validated();
 
-        $car = Car::query()->create();
+        $car = Car::query()->create($data);
 
         return response()->json([
             'success' => true,
