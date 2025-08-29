@@ -2,10 +2,7 @@
 
 use App\Models\Car;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
-
-uses(RefreshDatabase::class);
 
 test('can get all cars without authentication', function () {
     Car::factory()->count(3)->create();

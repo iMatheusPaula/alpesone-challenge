@@ -2,12 +2,8 @@
 
 use App\Models\Car;
 use Carbon\Carbon;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
-use Tests\TestCase;
-
-uses(TestCase::class, RefreshDatabase::class);
 
 beforeEach(fn() => Cache::forget('alpes_one_sync_time'));
 
@@ -79,7 +75,7 @@ test('command updates existing cars with new data', function () {
             'price' => 85000, // Price reduced
             'updated' => Carbon::now()->toDateTimeString(),
 
-    ]
+        ]
     ];
 
     Http::fake(['https://hub.alpes.one/api/v1/integrator/export/*' => Http::response($response)]);
@@ -181,7 +177,7 @@ test('command correctly processes field mappings', function () {
         'color' => 'Black',
         'fuel' => 'Diesel',
         'sold' => 0,
-        'created_at_source' => '2023-02-01 00:00:00',
-        'updated_at_source' => '2023-02-02 00:00:00'
+        'created_at_source' => '2025-02-27 15:53:57',
+        'updated_at_source' => '2025-06-16 16:27:36'
     ]);
 });

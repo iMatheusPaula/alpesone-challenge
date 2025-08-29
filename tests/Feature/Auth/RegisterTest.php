@@ -1,11 +1,6 @@
 <?php
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Symfony\Component\HttpFoundation\Response;
-
-//todo arrumar
-uses(RefreshDatabase::class);
 
 test('can register a new user with valid data', function () {
     $payload = [
@@ -17,7 +12,8 @@ test('can register a new user with valid data', function () {
 
     $response = $this->postJson('/api/register', $payload);
 
-    $response->assertStatus(201)
+    expect($response)
+        ->assertStatus(201)
         ->assertJsonStructure([
             'user' => [
                 'id',
@@ -36,7 +32,8 @@ test('can register a new user with valid data', function () {
 test('cannot register without required fields', function () {
     $response = $this->postJson('/api/register', []);
 
-    $response->assertStatus(422)
+    expect($response)
+        ->assertStatus(422)
         ->assertJsonValidationErrors(['name', 'email', 'password']);
 });
 
@@ -50,7 +47,8 @@ test('cannot register with invalid email', function () {
 
     $response = $this->postJson('/api/register', $payload);
 
-    $response->assertStatus(422)
+    expect($response)
+        ->assertStatus(422)
         ->assertJsonValidationErrors(['email']);
 });
 
@@ -64,7 +62,8 @@ test('cannot register with password confirmation mismatch', function () {
 
     $response = $this->postJson('/api/register', $payload);
 
-    $response->assertStatus(422)
+    expect($response)
+        ->assertStatus(422)
         ->assertJsonValidationErrors(['password']);
 });
 
@@ -78,7 +77,8 @@ test('cannot register with password too short', function () {
 
     $response = $this->postJson('/api/register', $payload);
 
-    $response->assertStatus(422)
+    expect($response)
+        ->assertStatus(422)
         ->assertJsonValidationErrors(['password']);
 });
 
@@ -96,6 +96,7 @@ test('cannot register with email already in use', function () {
 
     $response = $this->postJson('/api/register', $payload);
 
-    $response->assertStatus(422)
+    expect($response)
+        ->assertStatus(422)
         ->assertJsonValidationErrors(['email']);
 });

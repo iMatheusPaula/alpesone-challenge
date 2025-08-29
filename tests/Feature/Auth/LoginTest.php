@@ -1,10 +1,7 @@
 <?php
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
-
-uses(RefreshDatabase::class);
 
 test('user can login with valid credentials', function () {
     User::factory()->create([
@@ -19,7 +16,8 @@ test('user can login with valid credentials', function () {
 
     $response = $this->postJson('/api/login', $payload);
 
-    $response->assertStatus(200)
+    expect($response)
+        ->assertStatus(200)
         ->assertJsonStructure([
             'access_token',
             'token_type',
@@ -39,7 +37,8 @@ test('user cannot login with invalid password', function () {
 
     $response = $this->postJson('/api/login', $payload);
 
-    $response->assertStatus(422)
+    expect($response)
+        ->assertStatus(422)
         ->assertJson([
             'message' => 'As credenciais estão incorretas.',
             'errors' => [
@@ -63,7 +62,8 @@ test('user cannot login with invalid email', function () {
 
     $response = $this->postJson('/api/login', $payload);
 
-    $response->assertStatus(422)
+    expect($response)
+        ->assertStatus(422)
         ->assertJson([
             'message' => 'As credenciais estão incorretas.',
             'errors' => [
@@ -77,7 +77,8 @@ test('user cannot login with invalid email', function () {
 test('user cannot login without required fields', function () {
     $response = $this->postJson('/api/login', []);
 
-    $response->assertStatus(422)
+    expect($response)
+        ->assertStatus(422)
         ->assertJsonValidationErrors(['email', 'password']);
 });
 
@@ -89,6 +90,7 @@ test('user cannot login with invalid email format', function () {
 
     $response = $this->postJson('/api/login', $payload);
 
-    $response->assertStatus(422)
+    expect($response)
+        ->assertStatus(422)
         ->assertJsonValidationErrors(['email']);
 });

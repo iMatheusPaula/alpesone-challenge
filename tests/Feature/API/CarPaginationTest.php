@@ -1,9 +1,6 @@
 <?php
 
 use App\Models\Car;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-
-uses(RefreshDatabase::class);
 
 test('cars list is paginated', function () {
     Car::factory()->count(20)->create();
