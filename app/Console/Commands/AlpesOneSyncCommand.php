@@ -85,32 +85,7 @@ class AlpesOneSyncCommand extends Command
             $apiExternalIds[] = $carData['id'];
 
             // Map API data to database columns
-            $mappedData = [
-                'external_id' => $carData['id'],
-                'type' => $carData['type'] ?? null,
-                'brand' => $carData['brand'] ?? null,
-                'model' => $carData['model'] ?? null,
-                'version' => $carData['version'] ?? null,
-                'model_year' => $carData['year']['model'] ?? null,
-                'build_year' => $carData['year']['build'] ?? null,
-                'optionals' => $carData['optionals'] ?? [],
-                'doors' => $carData['doors'] ?? null,
-                'board' => $carData['board'] ?? null,
-                'chassi' => $carData['chassi'] ?? null,
-                'transmission' => $carData['transmission'] ?? null,
-                'km' => $carData['km'] ?? null,
-                'description' => $carData['description'] ?? null,
-                'category' => $carData['category'] ?? null,
-                'url_car' => $carData['url_car'] ?? null,
-                'old_price' => $carData['old_price'] ?? null,
-                'price' => $carData['price'] ?? null,
-                'color' => $carData['color'] ?? null,
-                'fuel' => $carData['fuel'] ?? null,
-                'photos' => $carData['fotos'] ?? [],
-                'sold' => $carData['sold'] ?? false,
-                'created_at_source' => $carData['created'] ?? null,
-                'updated_at_source' => $carData['updated'] ?? null,
-            ];
+            $mappedData = $this->map($carData);
 
             $isNewerThanLastSync = $lastSyncTime === null
                 || Carbon::parse($carData['updated'] ?? null)->gt($lastSyncTime)
@@ -118,7 +93,7 @@ class AlpesOneSyncCommand extends Command
 
             if ($isNewerThanLastSync) {
                 Car::query()->updateOrCreate(
-                    ['external_id' => $carData['id']], 
+                    ['external_id' => $carData['id']],
                     $mappedData
                 );
 
@@ -143,5 +118,41 @@ class AlpesOneSyncCommand extends Command
         Cache::put($this->cacheKey, $currentSyncTime, now()->addDay());
 
         $this->info('Car data processing completed successfully');
+    }
+
+    /**
+     * Map API data to database columns
+     *
+     * @param array $car
+     * @return array
+     */
+    private function map(array $car): array
+    {
+        return [
+            'external_id' => $car['id'],
+            'type' => $car['type'] ?? null,
+            'brand' => $car['brand'] ?? null,
+            'model' => $car['model'] ?? null,
+            'version' => $car['version'] ?? null,
+            'model_year' => $car['year']['model'] ?? null,
+            'build_year' => $car['year']['build'] ?? null,
+            'optionals' => $car['optionals'] ?? [],
+            'doors' => $car['doors'] ?? null,
+            'board' => $car['board'] ?? null,
+            'chassi' => $car['chassi'] ?? null,
+            'transmission' => $car['transmission'] ?? null,
+            'km' => $car['km'] ?? null,
+            'description' => $car['description'] ?? null,
+            'category' => $car['category'] ?? null,
+            'url_car' => $car['url_car'] ?? null,
+            'old_price' => $car['old_price'] ?? null,
+            'price' => $car['price'] ?? null,
+            'color' => $car['color'] ?? null,
+            'fuel' => $car['fuel'] ?? null,
+            'photos' => $car['fotos'] ?? [],
+            'sold' => $car['sold'] ?? false,
+            'created_at_source' => $car['created'] ?? null,
+            'updated_at_source' => $car['updated'] ?? null,
+        ];
     }
 }
