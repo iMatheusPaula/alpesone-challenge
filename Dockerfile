@@ -1,6 +1,7 @@
 FROM php:8.4-fpm AS base
 
 RUN apt-get update && apt-get install -y \
+    cron \
     curl \
     libpng-dev \
     libonig-dev \
