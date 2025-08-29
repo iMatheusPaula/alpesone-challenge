@@ -16,4 +16,4 @@ crontab /etc/cron.d/laravel-schedule
 
 service cron start
 
-exec php-fpm
+exec "$@"

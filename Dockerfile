@@ -44,4 +44,9 @@ COPY . .
 
 RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
 
+COPY docker-entrypoint.prod.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.prod.sh
+
+ENTRYPOINT ["docker-entrypoint.prod.sh"]
+
 CMD ["php-fpm"]
